@@ -14,14 +14,14 @@ def add():
         name = request.json["name"],
         standard = request.json["standard"]
         fees = request.json["fees"]
-        add_student((name, standard, fees))
+        add_student([name, standard, fees])
         return f"Student : {name} has been added successfully to the records.", 201
 
     except Exception as error:
         return f"Could not add Student because, {error}", 400
 
 
-@app.route("/v1/retrieve/<int:id>", methods=["GET"])
+@app.route("/v1/retrieve/<string:id>", methods=["GET"])
 def retrieve(id):
     try:
         data = retrieve_data(id)
@@ -34,7 +34,7 @@ def retrieve(id):
         return f"Could not retrieve Student Data because, {error}", 400
 
 
-@app.route("/v1/update/<int:id>", methods=["PATCH"])
+@app.route("/v1/update/<string:id>", methods=["PATCH"])
 def update(id):
     try:
         name = request.json["name"],
@@ -47,7 +47,7 @@ def update(id):
         return f"Could not Update Student Data because, {error}", 400
 
 
-@app.route("/v1/delete/<int:id>", methods=["DELETE"])
+@app.route("/v1/delete/<string:id>", methods=["DELETE"])
 def delete(id):
     try:
         remove_data(id)
@@ -55,6 +55,17 @@ def delete(id):
 
     except Exception as error:
         return f"Could not remove Student becasue, {error}", 400
+
+
+@app.route("/v1/pay/<string:id>", methods=["POST"])
+def pay(id):
+    try:
+        status = request.json["status"]
+        pay_fees(id, status)
+        return f"Fees Paid Successfully", 201
+
+    except Exception as error:
+        return f"Could not Pay fees because, {error}", 400
 
 
 if __name__ == "__main__":
